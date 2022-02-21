@@ -696,28 +696,6 @@ func NewIritaApp(
 	app.RegisterUpgradePlan(
 		"v3.1.0-rc1-wenchangchain", store.StoreUpgrades{},
 		func(ctx sdk.Context, plan sdkupgrade.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			opbParams := app.opbKeeper.GetParams(ctx)
-			gasOwner, err := sdk.AccAddressFromBech32(opbParams.BaseTokenManager)
-			if err != nil {
-				return nil, err
-			}
-			err = app.tokenKeeper.IssueToken(
-				ctx,
-				"gas",
-				"IRITA Fee Token",
-				"ugas",
-				18,
-				1000000000,
-				math.MaxUint64,
-				true,
-				gasOwner,
-			)
-			if err != nil {
-				return nil, err
-			}
-			evmParams := app.EvmKeeper.GetParams(ctx)
-			evmParams.EvmDenom = "ugas"
-			app.EvmKeeper.SetParams(ctx, evmParams)
 			fMtParams := app.FeeMarketKeeper.GetParams(ctx)
 			fMtParams.NoBaseFee = true
 			app.FeeMarketKeeper.SetParams(ctx, fMtParams)
