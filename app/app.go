@@ -716,6 +716,15 @@ func NewIritaApp(
 		},
 	)
 
+	app.RegisterUpgradePlan(
+		"v3.1.0-rc2-wenchangchain", store.StoreUpgrades{
+			Added: []string{mttypes.StoreKey},
+		},
+		func(ctx sdk.Context, plan sdkupgrade.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	// set peer filter by node ID
 	app.SetIDPeerFilter(app.nodeKeeper.FilterNodeByID)
 
